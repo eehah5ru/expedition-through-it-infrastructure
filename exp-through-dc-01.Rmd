@@ -1,0 +1,60 @@
+---
+title: "Экспедиция сквозь датацентры к технобудущему"
+output: html_notebook
+---
+
+```{r include=FALSE}
+packages <- c("jsonlite", "plyr", "ggrepel", "psych", "stringi", "devtools")
+packages <- lapply(packages, FUN = function(x) {
+  if (!require(x, character.only = TRUE)) {
+    install.packages(x)
+    library(x, character.only = TRUE)
+  }
+})
+
+#
+# install updated ggmap library
+# 
+library(devtools)
+install_github("dkahle/ggmap")
+library(ggmap)
+
+# set working directory
+setwd("/Volumes/bb3/_works/2016-expedition-through-dc/research")
+
+```
+
+![](http://gorod.tomsk.ru/uploads/34046/1295202914/9.jpg)
+
+26 июня мы отправились в экспедицию “Сквозь дата-центры к технобудущему”, вели беседы по рациям о возможностях автоматизации окружающего, возможностях включения нечеловеческих акторов в повестку дня, переизбытке чувств, кошачьем образе жизни и о требованиях безработицы.
+
+“Приём-приём, как слышно?”  
+“Приём. Слышно хорошо”  
+“Проверка связи”  
+“Привет!”  
+
+```{r load cods, cols.print=7, rows.print=3, echo=TRUE, message=FALSE}
+cods <- fromJSON("./data/moscow_cods_with_coords.json", flatten=TRUE)
+cods
+```
+
+```{r}
+metros <- fromJSON("./data/metro_stations.json", flatten=TRUE)
+head(metros$stations)
+length(metros$stations)
+```
+
+```{r message=FALSE}
+map =  get_map(location = c(lon = 37.618423, lat = 55.751244), zoom = 12, source="google")
+ggmap(map)
+```
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
