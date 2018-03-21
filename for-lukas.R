@@ -3,6 +3,7 @@ source("prelude.R", echo = FALSE)
 # 
 # load data
 # 
+
 # load cods with coords
 cods <- fromJSON("./data/moscow_cods_with_coords.json", flatten=TRUE)
 cods <- subset(cods, !is.na(coords.latitude))
@@ -12,62 +13,13 @@ cod_coords$count <- 1
 cod_coords <- rename(cod_coords, c("coords.latitude"="lat", "coords.longitude"="lon"))
 cod_coords <- subset(cod_coords, !is.na(lat))
 
-# load metro stations
-metros <- fromJSON("./data/metro_stations.json", flatten=TRUE)
-# link metro lines to stations
-v <- mapply(function (x, y) data.frame(line=rep(x, length(y$station)),
-                                       station=y$station,
-                                       lat=as.numeric(y$lat),
-                                       lon=as.numeric(y$lon)),
-            metros$line,
-            metros$stations,
-            SIMPLIFY=FALSE,
-            USE.NAMES = FALSE)
 
-metro_stations <- Reduce(function(x, y) merge(x, y, all=TRUE), v)
 
 # 
 # load moscow map
 # 
 # moscow coords: c(lon = 37.618423, lat = 55.751244)
 moscow_map =  get_map(location = c(lon = 37.618423, lat = 55.751244), zoom = 12, source="google")
-
-# v <- metros$stations
-# v$line <- metros$line
-# summary(v[[1]])
-# summary((v[[1]]))
-# summary(v$line)
-
-
-# colnames(metros$stations[[1]])
-
-# ?lapply
-# ?flatten
-# ?mapply
-# ?data.frame
-# ?do.call
-# ?rep
-# rep(1:4, 2)
-
-# mm <- flatten(data.frame(metros$stations))
-# colnames(mm)
-
-
-
-# summary(metro_stations)
-# is.list(v)
-
-
-# ?Reduce
-# ?merge
-# 
-# ?lapply
-# ?get_map
-
-# head(v)
-# head(cods)
-# summary(cods)
-
 
 # 
 # clusterize cods
@@ -77,17 +29,6 @@ k <- kmeans(cod_coords, 20)
 cods$cluster <- factor(k$cluster)
 centers <- as.data.frame(k$centers)
 centers$num <- c(1:length(centers$lon))
-
-
-# ?subset
-# ?geom_point
-# ?aes
-# ?ggmap
-# ?geom_text_repel
-# ?get_map
-# ?geom_text_repel
-
-# ?get_openstreetmap
 
 #
 # plot interesting cods
